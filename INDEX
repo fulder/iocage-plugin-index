@@ -240,6 +240,14 @@
     "official": false,
     "primary_pkg": null
   },
+    "plex": {
+        "MANIFEST": "plex.json",
+        "description": "Plex media server including auto update",
+        "icon": "https://icons.freenas.org/community-icons/plex.png",
+        "name": "Plex",
+        "official": false,
+        "primary_pkg": null
+    },
     "privatebin": {
         "MANIFEST": "privatebin.json",
         "description": "PrivateBin is a minimalist, open source online pastebin where the server has zero knowledge of pasted data.",
