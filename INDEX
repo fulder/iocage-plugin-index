@@ -23,6 +23,14 @@
         "official": false,
         "primary_pkg": null
     },
+    "certbot": {
+        "MANIFEST": "certbot.json",
+        "description": "Certbot jail for auto renewal of SSL certificates",
+        "icon": "https://icons.freenas.org/community-icons/certbot.png",
+        "name": "Certbot",
+        "official": false,
+        "primary_pkg": null
+    },
     "channels-dvr": {
         "MANIFEST": "channels-dvr.json",
         "description": "DVR server for the Channels apps. Makes digital recordings of broadcast television using HDHomeRun network tuners. (Requires Subscription)",
