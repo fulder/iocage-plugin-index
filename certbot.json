@@ -5,7 +5,8 @@
   "artifact": "https://github.com/fulder/iocage-plugin-certbot",
   "pkgs": [
     "python37",
-    "py37-pip"
+    "py37-pip",
+    "nano"
   ],
   "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
   "fingerprints": {
