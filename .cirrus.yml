@@ -92,6 +92,12 @@ install_template: &INSTALL_PLUGIN
       ./plugin/post_update.sh
     fi
 
+    if [ -f ./plugin/ui.json ]
+    then
+      admin_portal=$(jq -r '.adminportal' ./plugin/ui.json | sed 's/%%IP%%/localhost/')
+      fetch ${admin_portal}
+    fi
+
 backuppc_task:
   <<: *INSTALL_PLUGIN
   matrix:
