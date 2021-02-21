@@ -121,7 +121,7 @@ calibre-web_task:
   only_if: "changesInclude('calibre-web.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "calibre-web.json"
 
