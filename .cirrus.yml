@@ -83,6 +83,8 @@ install_template: &INSTALL_PLUGIN
 
     ./plugin/post_install.sh
 
+    service homeassistant reinstall
+
     if [ -f ./plugin/pre_update.sh ]
     then
       ./plugin/pre_update.sh
