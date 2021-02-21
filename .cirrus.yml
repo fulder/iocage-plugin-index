@@ -83,6 +83,7 @@ install_template: &INSTALL_PLUGIN
 
     ./plugin/post_install.sh
 
+    ls -l /usr/local/share/homeassistant
     service homeassistant reinstall
 
     if [ -f ./plugin/pre_update.sh ]
