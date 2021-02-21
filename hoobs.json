@@ -13,6 +13,7 @@
         "gcc",
         "nss_mdns",
         "jq"
+
     ],
     "packagesite": "http://pkg.FreeBSD.org/${ABI}/quarterly",
     "fingerprints": {
