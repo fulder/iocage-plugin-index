@@ -65,8 +65,8 @@ install_template: &INSTALL_PLUGIN
       pkg install -y git-lite || pkg install -y git
     fi
 
-    freebsd-version
-    git clone -b $(freebsd-version) ${plugin_repo} ./plugin || git clone -b master ${plugin_repo} ./plugin
+    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
+    git clone -b ${release_branch} ${plugin_repo} ./plugin || git clone -b master ${plugin_repo} ./plugin
 
     if [ -d "./plugin/overlay" ]
     then
