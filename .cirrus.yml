@@ -65,7 +65,8 @@ install_template: &INSTALL_PLUGIN
       pkg install -y git-lite || pkg install -y git
     fi
 
-    git clone -b ${release} ${plugin_repo} ./plugin || git clone -b master ${plugin_repo} ./plugin
+    freebsd-version
+    git clone -b $(freebsd-version) ${plugin_repo} ./plugin || git clone -b master ${plugin_repo} ./plugin
 
     if [ -d "./plugin/overlay" ]
     then
@@ -288,6 +289,8 @@ hoobs_task:
   <<: *INSTALL_PLUGIN
   only_if: "changesInclude('hoobs.json')"
   matrix:
+    - freebsd_instance:
+        image_family: freebsd-11-3
     - freebsd_instance:
         image_family: freebsd-12-1
   env:
