@@ -75,6 +75,7 @@ install_template: &INSTALL_PLUGIN
     if ! echo ${pkgs} | grep -q "git"
     then
       pkg remove -y git-lite git
+      pkg autoremove -y
     fi
 
     ./plugin/post_install.sh
