@@ -148,7 +148,7 @@ deluge-pip_task:
   only_if: "changesInclude('deluge-pip.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "deluge-pip.json"
 
