@@ -204,7 +204,7 @@ esphome_task:
   only_if: "changesInclude('esphome.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-11-3
   env:
     PLUGIN_FILE: "esphome.json"
 
