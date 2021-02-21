@@ -8,7 +8,6 @@
     },
     "pkgs": [
         "xmrig"
-
     ],
     "packagesite": "http://pkg.cdn.trueos.org/iocage/11.3-RELEASE",
     "fingerprints": {

@@ -17,7 +17,6 @@
     "pkgconf",
     "python37",
     "py37-pillow"
-
   ],
   "packagesite": "http://pkg.FreeBSD.org/${ABI}/quarterly",
   "fingerprints": {

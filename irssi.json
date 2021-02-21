@@ -8,7 +8,6 @@
     },
     "pkgs": [
         "irssi"
-
     ],
     "packagesite": "http://pkg.cdn.trueos.org/iocage/11.3-RELEASE",
     "fingerprints": {
