@@ -83,6 +83,7 @@ install_template: &INSTALL_PLUGIN
 
     ./plugin/post_install.sh
 
+    whoami
     ls -l /usr/local/share/homeassistant
     service homeassistant reinstall
 
