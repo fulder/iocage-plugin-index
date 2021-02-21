@@ -60,7 +60,7 @@ install_template: &INSTALL_PLUGIN
     echo "Installing $name pkgs: $pkgs"
     pkg install -y $pkgs
 
-    if git --version 2>&1 >/dev/null
+    if [ "$(which git)" = "" ]
     then
       pkg install -y git-lite || pkg install -y git
     fi
