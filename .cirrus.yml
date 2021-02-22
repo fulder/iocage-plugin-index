@@ -85,12 +85,15 @@ install_template: &INSTALL_PLUGIN
 
     ./plugin/post_install.sh || true
 
-    sleep 10
 
-    whoami
     ls -l /usr/local/share/homeassistant
     ls -l /usr/local/share/homeassistant/bin
-    service homeassistant oneinstall
+
+    python -m venv ./test-venv
+
+    ls -l ./test-venv
+    ls -l ./test-venv/bin
+
 
     if [ -f ./plugin/pre_update.sh ]
     then
