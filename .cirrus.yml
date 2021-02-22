@@ -106,6 +106,6 @@ homeassistant_task:
   only_if: "changesInclude('homeassistant.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "homeassistant.json"
