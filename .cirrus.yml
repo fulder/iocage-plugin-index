@@ -87,7 +87,8 @@ install_template: &INSTALL_PLUGIN
 
     whoami
     ls -l /usr/local/share/homeassistant
-    service homeassistant reinstall
+    ls -l /usr/local/share/homeassistant/bin
+    service homeassistant oneinstall
 
     if [ -f ./plugin/pre_update.sh ]
     then
