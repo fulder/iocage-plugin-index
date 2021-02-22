@@ -81,7 +81,7 @@ install_template: &INSTALL_PLUGIN
       cp -r ./plugin/overlay/ /
     fi
 
-    ./plugin/post_install.sh
+    ./plugin/post_install.sh || true
 
     whoami
     ls -l /usr/local/share/homeassistant
