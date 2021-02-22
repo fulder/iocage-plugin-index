@@ -73,13 +73,15 @@ install_template: &INSTALL_PLUGIN
 
     echo "Test install plugin pkgs for plugin: $name"
     echo "Installing $name pkgs: $pkgs"
-    pkg install -y $pkgs
+    #pkg install -y $pkgs
 
     if [ -d "./plugin/overlay" ]
     then
       echo "Found overlay folder"
       cp -r ./plugin/overlay/ /
     fi
+
+    pkg install -y python38 bash
 
     ./plugin/post_install.sh || true
 
