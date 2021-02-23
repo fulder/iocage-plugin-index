@@ -11,11 +11,7 @@
         "linux64",
         "linux"
     ],
-    "pkgs": [
-        "backuppc4",
-        "apache24"
-    ],
-    "packagesite": "https://pkg.FreeBSD.org/${ABI}/latest",
+    "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
     "fingerprints": {
         "iocage-plugins": [
             {
