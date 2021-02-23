@@ -82,16 +82,18 @@ install_template: &INSTALL_PLUGIN
     # Cleanup before plugin pkg installation
     if ! echo ${pkgs} | grep -q "git"
     then
-      pkg remove -y git-lite git jq ca_root_nss
+      pkg remove -y git-lite git jq
       pkg autoremove -y
     fi
 
+    echo "Fetching $name pkgs: $pkgs"
+    pkg fetch -y $pkgs
+
     if ! echo ${pkgs} | grep -q "ca_root_nss"
     then
-      pkg remove -f -y ca_root_nss
+      pkg remove -y -f ca_root_nss
     fi
 
-    echo "Test install plugin pkgs for plugin: $name"
     echo "Installing $name pkgs: $pkgs"
     pkg install -y $pkgs
 
