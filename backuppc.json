@@ -7,11 +7,15 @@
         "nat": 1,
         "nat_forwards": "tcp(80:9090)"
     },
+    "kmods": [
+        "linux64",
+        "linux"
+    ],
     "pkgs": [
         "backuppc4",
         "apache24"
     ],
-    "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
+    "packagesite": "https://pkg.FreeBSD.org/${ABI}/latest",
     "fingerprints": {
         "iocage-plugins": [
             {
