@@ -3,7 +3,7 @@ freebsd_instance:
   memory: "1"
 
 install_template: &INSTALL_PLUGIN
-  requirements_script: pkg install -y jq ca_root_nss
+  requirements_script: pkg install -y jq
   install_script: |
     release=$(jq -r '.release' $PLUGIN_FILE)
     name=$(jq '.name' $PLUGIN_FILE)
@@ -12,6 +12,11 @@ install_template: &INSTALL_PLUGIN
     plugin_repo=$(jq -r '.artifact' $PLUGIN_FILE)
     pkgs=$(jq -r '.pkgs | join(" ")' $PLUGIN_FILE)
     kmods=$(jq -r '.kmods' $PLUGIN_FILE)
+
+    if ! echo ${packagesite} | grep -q "https"
+    then
+      pkg install -y ca_root_nss
+    fi
 
     pkg_dir=/usr/local/test
     repos_dir="${pkg_dir}/repos"
@@ -79,6 +84,11 @@ install_template: &INSTALL_PLUGIN
     then
       pkg remove -y git-lite git jq ca_root_nss
       pkg autoremove -y
+    fi
+
+    if ! echo ${pkgs} | grep -q "ca_root_nss"
+    then
+      pkg remove -f -y ca_root_nss
     fi
 
     echo "Test install plugin pkgs for plugin: $name"
