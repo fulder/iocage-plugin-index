@@ -96,7 +96,7 @@ install_template: &INSTALL_PLUGIN
     fi
 
     echo "Installing $name pkgs: $pkgs"
-    pkg install -y $pkgs
+    pkg install --no-repo-update -y $pkgs
 
     if [ -d "./plugin/overlay" ]
     then
