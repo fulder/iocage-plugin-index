@@ -3,6 +3,10 @@
   "release": "12.1-RELEASE",
   "artifact": "https://github.com/tprelog/iocage-homeassistant.git",
   "official": "false",
+  "kmods": [
+    "linux64",
+    "linux"
+  ],
   "devfs_ruleset": {
     "paths": {
       "zfs": null,
