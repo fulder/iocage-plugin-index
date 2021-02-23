@@ -3,7 +3,7 @@ freebsd_instance:
   memory: "4"
 
 install_template: &INSTALL_PLUGIN
-  requirements_script: pkg install -y jq
+  requirements_script: pkg install -y jq ca_root_nss
   install_script: |
     release=$(jq -r '.release' $PLUGIN_FILE)
     name=$(jq '.name' $PLUGIN_FILE)
@@ -11,6 +11,7 @@ install_template: &INSTALL_PLUGIN
     fingerprints=$(jq -r '.fingerprints | keys[]' $PLUGIN_FILE)
     plugin_repo=$(jq -r '.artifact' $PLUGIN_FILE)
     pkgs=$(jq -r '.pkgs | join(" ")' $PLUGIN_FILE)
+    kmods=$(jq -r '.kmods' $PLUGIN_FILE)
 
     pkg_dir=/usr/local/test
     repos_dir="${pkg_dir}/repos"
@@ -56,6 +57,15 @@ install_template: &INSTALL_PLUGIN
       done
     done
 
+    if [ "$kmods" != "null" ]
+    then
+      echo $kmods | jq -r  '.[]' | while IFS='' read kmod
+      do
+        echo "Loading kmod: ${kmod}"
+        kldload -nv ${kmod}
+      done
+    fi
+
     if [ "$(which git)" = "" ]
     then
       pkg install -y git-lite || pkg install -y git
@@ -67,7 +77,7 @@ install_template: &INSTALL_PLUGIN
     # Cleanup before plugin pkg installation
     if ! echo ${pkgs} | grep -q "git"
     then
-      pkg remove -y git-lite git jq
+      pkg remove -y git-lite git jq ca_root_nss
       pkg autoremove -y
     fi
 
@@ -95,14 +105,16 @@ install_template: &INSTALL_PLUGIN
     ls -l ./test-venv/bin
 
 
-    if [ -f ./plugin/pre_update.sh ]
+    if [ -f ./plugin/pre_update.sh ] && ! [ -x ./plugin/pre_update.sh ]
     then
-      ./plugin/pre_update.sh
+      echo "pre_update.sh script not executable"
+      exit 1
     fi
 
-    if [ -f ./plugin/post_update.sh ]
+    if [ -f ./plugin/post_update.sh ] && ! [ -x ./plugin/post_update.sh ]
     then
-      ./plugin/post_update.sh
+      echo "post_update.sh script not executable"
+      exit 1
     fi
 
 
