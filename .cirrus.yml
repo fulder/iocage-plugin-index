@@ -95,9 +95,10 @@ install_template: &INSTALL_PLUGIN
 
     ./plugin/post_install.sh || true
 
-
     ls -l /usr/local/share/homeassistant
     ls -l /usr/local/share/homeassistant/bin
+
+    /usr/local/share/homeassistant/bin/python3.8 -Im ensurepip --upgrade --default-pip
 
     python3.8 -m venv ./test-venv
 
