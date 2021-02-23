@@ -87,6 +87,7 @@ install_template: &INSTALL_PLUGIN
     fi
 
     echo "Fetching $name pkgs: $pkgs"
+    pkg update
     pkg fetch -y $pkgs
 
     if ! echo ${pkgs} | grep -q "ca_root_nss"
