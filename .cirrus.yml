@@ -1,6 +1,6 @@
 freebsd_instance:
-  cpu: 4
-  memory: "4"
+  cpu: 1
+  memory: "1"
 
 install_template: &INSTALL_PLUGIN
   requirements_script: pkg install -y jq ca_root_nss
@@ -99,7 +99,7 @@ install_template: &INSTALL_PLUGIN
     ls -l /usr/local/share/homeassistant
     ls -l /usr/local/share/homeassistant/bin
 
-    python -m venv ./test-venv
+    python3.8 -m venv ./test-venv
 
     ls -l ./test-venv
     ls -l ./test-venv/bin
