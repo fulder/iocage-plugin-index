@@ -15,10 +15,17 @@ install_template: &INSTALL_PLUGIN
     pkgs=$(jq -r '.pkgs | join(" ")' $PLUGIN_FILE)
     kmods=$(jq -r '.kmods' $PLUGIN_FILE)
 
+    plugin_dir="./plugin"
+
     if echo ${packagesite} | grep -q "https"
     then
       pkg install -y ca_root_nss
     fi
+
+    pkg install -y git-lite || pkg install -y git
+
+    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
+    git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
 
     pkg_dir=/usr/local/test
     repos_dir="${pkg_dir}/repos"
@@ -73,42 +80,34 @@ install_template: &INSTALL_PLUGIN
       done
     fi
 
-    if [ "$(which git)" = "" ]
-    then
-      pkg install -y git-lite || pkg install -y git
-    fi
-
-    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
-    git clone -b ${release_branch} ${plugin_repo} ./plugin || git clone -b master ${plugin_repo} ./plugin
-
     # Cleanup before plugin pkg installation
-    pkg remove --yes git-lite git jq
+    pkg delete --yes git-lite git jq
     pkg autoremove --yes
 
     echo "Fetching $name pkgs: $pkgs"
     pkg update
     pkg fetch --dependencies --yes $pkgs
 
-    pkg remove --yes ca_root_nss
+    pkg delete --yes ca_root_nss || true
 
     echo "Installing $name pkgs: $pkgs"
     pkg install --no-repo-update --yes $pkgs
 
-    if [ -d "./plugin/overlay" ]
+    if [ -d "${plugin_dir}/overlay" ]
     then
       echo "Found overlay folder"
-      cp -r ./plugin/overlay/ /
+      cp -r ${plugin_dir}/overlay/ /
     fi
 
-    ./plugin/post_install.sh
+    ${plugin_dir}/post_install.sh
 
-    if [ -f ./plugin/pre_update.sh ] && ! [ -x ./plugin/pre_update.sh ]
+    if [ -f ${plugin_dir}/pre_update.sh ] && ! [ -x ${plugin_dir}/pre_update.sh ]
     then
       echo "pre_update.sh script not executable"
       exit 1
     fi
 
-    if [ -f ./plugin/post_update.sh ] && ! [ -x ./plugin/post_update.sh ]
+    if [ -f ${plugin_dir}/post_update.sh ] && ! [ -x ${plugin_dir}/post_update.sh ]
     then
       echo "post_update.sh script not executable"
       exit 1
@@ -146,7 +145,7 @@ calibre-web_task:
   only_if: "changesInclude('calibre-web.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-2
+        image_family: freebsd-12-1
   env:
     PLUGIN_FILE: "calibre-web.json"
 
@@ -173,7 +172,7 @@ deluge-pip_task:
   only_if: "changesInclude('deluge-pip.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-2
+        image_family: freebsd-12-1
   env:
     PLUGIN_FILE: "deluge-pip.json"
 
@@ -389,7 +388,7 @@ monica_task:
   only_if: "changesInclude('monica.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-2
+        image_family: freebsd-11-3
   env:
     PLUGIN_FILE: "monica.json"
 
@@ -425,7 +424,7 @@ node-red_task:
   only_if: "changesInclude('node-red.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-2
+        image_family: freebsd-12-1
   env:
     PLUGIN_FILE: "node-red.json"
 
