@@ -116,7 +116,14 @@ install_template: &INSTALL_PLUGIN
 
 tautulli_task:
   <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('tautulli.json')"
+  matrix:
+    - freebsd_instance:
+        image_family: freebsd-12-2
+  env:
+    PLUGIN_FILE: "backuppc.json"
+
+bazarr_task:
+  <<: *INSTALL_PLUGIN
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
