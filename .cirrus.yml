@@ -115,7 +115,6 @@ install_template: &INSTALL_PLUGIN
 
 backuppc_task:
   <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('backuppc.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
