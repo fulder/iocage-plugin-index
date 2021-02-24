@@ -83,7 +83,7 @@ install_template: &INSTALL_PLUGIN
 
     # Cleanup before plugin pkg installation
     pkg remove --yes git-lite git jq ca_root_nss
-    pkg --yes autoremove
+    pkg autoremove --yes
 
     echo "Fetching $name pkgs: $pkgs"
     pkg update
