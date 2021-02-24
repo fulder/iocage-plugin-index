@@ -3,7 +3,7 @@ freebsd_instance:
   memory: "1"
 
 install_template: &INSTALL_PLUGIN
-  requirements_script:
+  requirements_script: |
     pkg delete --all --yes
     pkg install --yes jq
   install_script: |
