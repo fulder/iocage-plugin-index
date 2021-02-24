@@ -13,6 +13,7 @@
         "py37-openssl",
         "security/ca_root_nss",
         "git"
+
     ],
     "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
     "fingerprints": {
