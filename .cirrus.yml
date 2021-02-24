@@ -22,10 +22,7 @@ install_template: &INSTALL_PLUGIN
       pkg install -y ca_root_nss
     fi
 
-    pkg install -y git-lite || pkg install -y git
 
-    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
-    git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
 
     pkg_dir=/usr/local/test
     repos_dir="${pkg_dir}/repos"
@@ -79,6 +76,11 @@ install_template: &INSTALL_PLUGIN
         kldload -nv ${kmod}
       done
     fi
+
+    pkg install -y git-lite || pkg install -y git
+
+    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
+    git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
 
     # Cleanup before plugin pkg installation
     pkg delete --yes git-lite git jq
