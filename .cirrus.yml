@@ -4,7 +4,7 @@ freebsd_instance:
 
 install_template: &INSTALL_PLUGIN
   requirements_script:
-    pkg delete --all
+    pkg delete --all --yes
     pkg install --yes jq
   install_script: |
     release=$(jq -r '.release' $PLUGIN_FILE)
