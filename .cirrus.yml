@@ -3,10 +3,10 @@ freebsd_instance:
   memory: "1"
 
 install_template: &INSTALL_PLUGIN
-  requirements_script: pkg install --yes jq
+  requirements_script:
+    pkg delete --all
+    pkg install --yes jq
   install_script: |
-    pkg info
-
     release=$(jq -r '.release' $PLUGIN_FILE)
     name=$(jq '.name' $PLUGIN_FILE)
     packagesite=$(jq '.packagesite' $PLUGIN_FILE)
