@@ -5,6 +5,8 @@ freebsd_instance:
 install_template: &INSTALL_PLUGIN
   requirements_script: pkg install --yes jq
   install_script: |
+    pkg info
+
     release=$(jq -r '.release' $PLUGIN_FILE)
     name=$(jq '.name' $PLUGIN_FILE)
     packagesite=$(jq '.packagesite' $PLUGIN_FILE)
