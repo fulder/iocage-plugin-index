@@ -77,8 +77,11 @@ install_template: &INSTALL_PLUGIN
     pkg autoremove --yes
     pkg clean --yes
 
+    pkg -vv
     # Start using plugin repos
     export REPOS_DIR=$repos_dir
+
+    pkg -vv
 
     if echo ${packagesite} | grep -q "https"
     then
