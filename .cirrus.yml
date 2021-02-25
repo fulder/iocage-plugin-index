@@ -82,11 +82,8 @@ install_template: &INSTALL_PLUGIN
       pkg install --yes ca_root_nss
     fi
 
-    pkg -vv
-    pkg info
     # Start using plugin repos
     export REPOS_DIR=$repos_dir
-    pkg -vv
 
     echo "Fetching $name pkgs: $pkgs"
     pkg fetch --dependencies --yes $pkgs
