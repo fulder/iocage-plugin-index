@@ -77,16 +77,16 @@ install_template: &INSTALL_PLUGIN
     pkg autoremove --yes
     pkg clean --yes
 
-    pkg -vv
-    # Start using plugin repos
-    export REPOS_DIR=$repos_dir
-
-    pkg -vv
-
     if echo ${packagesite} | grep -q "https"
     then
       pkg install --yes ca_root_nss
     fi
+
+    pkg -vv
+    pkg info
+    # Start using plugin repos
+    export REPOS_DIR=$repos_dir
+    pkg -vv
 
     echo "Fetching $name pkgs: $pkgs"
     pkg update
