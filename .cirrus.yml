@@ -19,10 +19,14 @@ install_template: &INSTALL_PLUGIN
 
     if echo ${packagesite} | grep -q "https"
     then
-      pkg install -y ca_root_nss
+      pkg install --yes ca_root_nss
     fi
 
-
+    pkg install --yes git-lite || pkg install --yes git
+    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
+    git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
+    pkg delete --yes git-lite git
+    pkg clean --yes
 
     pkg_dir=/usr/local/test
     repos_dir="${pkg_dir}/repos"
@@ -77,13 +81,7 @@ install_template: &INSTALL_PLUGIN
       done
     fi
 
-    pkg install -y git-lite || pkg install -y git
-
-    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
-    git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
-
-    # Cleanup before plugin pkg installation
-    pkg delete --yes git-lite git jq
+    pkg delete --yes jq
     pkg autoremove --yes
 
     echo "Fetching $name pkgs: $pkgs"
