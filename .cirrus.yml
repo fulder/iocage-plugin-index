@@ -89,7 +89,6 @@ install_template: &INSTALL_PLUGIN
     pkg -vv
 
     echo "Fetching $name pkgs: $pkgs"
-    pkg update
     pkg fetch --dependencies --yes $pkgs
 
     pkg delete --yes ca_root_nss || true
