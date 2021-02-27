@@ -14,10 +14,15 @@ install_template: &INSTALL_PLUGIN
     pkgs=$(jq -r '.pkgs | join(" ")' $PLUGIN_FILE)
     kmods=$(jq -r '.kmods' $PLUGIN_FILE)
 
+    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
+    if [ -z $PLUGIN_BRANCH ]
+    then
+      release_branch=${PLUGIN_BRANCH}
+    fi
+
     # Clone plugins artifacts
     plugin_dir="./plugin"
     pkg install --yes git-lite || pkg install --yes git
-    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
     git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
 
     pkg_dir=/usr/local/test
@@ -113,11 +118,13 @@ install_template: &INSTALL_PLUGIN
       exit 1
     fi
 
-backuppc_task:
+homeassitant_task:
   <<: *INSTALL_PLUGIN
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
+      env:
+        PLUGIN_BRANCH: 12.2-RELEASE
   env:
-    PLUGIN_FILE: "backuppc.json"
+    PLUGIN_FILE: "homeassistant.json"
 
