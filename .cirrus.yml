@@ -15,7 +15,7 @@ install_template: &INSTALL_PLUGIN
     kmods=$(jq -r '.kmods' $PLUGIN_FILE)
 
     plugin_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
-    if ![ -z $PLUGIN_BRANCH ]
+    if ! [ -z $PLUGIN_BRANCH ]
     then
       plugin_branch=${PLUGIN_BRANCH}
     fi
