@@ -19,7 +19,7 @@ install_template: &INSTALL_PLUGIN
     then
       plugin_branch=${PLUGIN_BRANCH}
     fi
-    echo "Using plugin branch: {plugin_branch}"
+    echo "Using plugin branch: ${plugin_branch}"
 
     # Clone plugins artifacts
     plugin_dir="./plugin"
