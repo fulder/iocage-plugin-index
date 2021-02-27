@@ -14,16 +14,17 @@ install_template: &INSTALL_PLUGIN
     pkgs=$(jq -r '.pkgs | join(" ")' $PLUGIN_FILE)
     kmods=$(jq -r '.kmods' $PLUGIN_FILE)
 
-    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
-    if [ -z $PLUGIN_BRANCH ]
+    plugin_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
+    if ![ -z $PLUGIN_BRANCH ]
     then
-      release_branch=${PLUGIN_BRANCH}
+      plugin_branch=${PLUGIN_BRANCH}
     fi
+    echo "Using plugin branch: {plugin_branch}
 
     # Clone plugins artifacts
     plugin_dir="./plugin"
     pkg install --yes git-lite || pkg install --yes git
-    git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
+    git clone -b ${plugin_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
 
     pkg_dir=/usr/local/test
     repos_dir="${pkg_dir}/repos"
