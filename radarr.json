@@ -9,7 +9,6 @@
     },
     "pkgs": [
         "radarr"
-
     ],
     "packagesite": "http://pkg.FreeBSD.org/${ABI}/latest",
     "fingerprints": {
