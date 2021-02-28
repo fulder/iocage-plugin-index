@@ -2,7 +2,6 @@
 set -e
 
 pkg install --yes jq
-ls -l
 
 release=$(jq -r '.release' $PLUGIN_FILE)
 name=$(jq '.name' $PLUGIN_FILE)
