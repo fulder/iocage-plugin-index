@@ -11,6 +11,7 @@ install_template: &INSTALL_PLUGIN
 
     freebsd-version
     freebsd-version -u
+    freebsd-version -ur
     freebsd-version -uk
 
 #    release=$(jq -r '.release' $PLUGIN_FILE)
