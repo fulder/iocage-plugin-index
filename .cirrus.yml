@@ -1,96 +1,9 @@
 freebsd_instance:
-  cpu: 1
-  memory: "1"
+  cpu: 4
+  memory: "4"
 
 install_template: &INSTALL_PLUGIN
-  requirements_script: pkg install -y jq
-  install_script: |
-    release=$(jq -r '.release' $PLUGIN_FILE)
-    name=$(jq '.name' $PLUGIN_FILE)
-    packagesite=$(jq '.packagesite' $PLUGIN_FILE)
-    fingerprints=$(jq -r '.fingerprints | keys[]' $PLUGIN_FILE)
-    plugin_repo=$(jq -r '.artifact' $PLUGIN_FILE)
-
-    pkg_dir=/usr/local/test
-    repos_dir="${pkg_dir}/repos"
-    fingerprints_dir="${pkg_dir}/fingerprints"
-
-    echo "Creating main repos dir: ${repos_dir}"
-    mkdir -p $repos_dir
-    export REPOS_DIR=$repos_dir
-
-    pkg_conf_path="${repos_dir}/test.conf"
-    echo "iocage-plugins: {" > $pkg_conf_path
-    echo "url: $packagesite," >> $pkg_conf_path
-    echo "signature_type: \"fingerprints\"," >> $pkg_conf_path
-    echo "fingerprints \"${fingerprints_dir}\"," >> $pkg_conf_path
-    echo "enabled: true" >> $pkg_conf_path
-    echo } >> $pkg_conf_path
-    echo "Created test pkg config file:"
-    cat $pkg_conf_path
-
-    trusted_fingerprints="$fingerprints_dir/trusted"
-    mkdir -p "${trusted_fingerprints}"
-
-    for repo_name in $fingerprints
-    do
-      repo_fingerprints=$(jq -rc '."fingerprints"."'${repo_name}'"[]' $PLUGIN_FILE)
-
-      repo_count=1
-      echo $repo_fingerprints | while IFS='' read f
-      do
-        echo "Creating fingerprint file for repo:"
-        echo $f
-
-        function=$(echo $f | jq -r '.function')
-        fingerprint=$(echo $f | jq -r '.fingerprint')
-        file_path=${trusted_fingerprints}/${repo_name}_${repo_count}
-
-        echo "Creating new fingerprint file: ${file_path}"
-
-        echo "function: $function" > ${file_path}
-        echo "fingerprint: $fingerprint" >> ${file_path}
-
-        repo_count=$(expr $repo_count + 1)
-      done
-    done
-
-    echo "Test install plugin pkgs for plugin: $name"
-    pkgs=$(jq -r '.pkgs | join(" ")' $PLUGIN_FILE)
-    echo "Installing $name pkgs: $pkgs"
-    pkg install -y $pkgs
-
-    if [ "$(which git)" = "" ]
-    then
-      pkg install -y git-lite || pkg install -y git
-    fi
-
-    release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
-    git clone -b ${release_branch} ${plugin_repo} ./plugin || git clone -b master ${plugin_repo} ./plugin
-
-    if [ -d "./plugin/overlay" ]
-    then
-      echo "Found overlay folder"
-      cp -r ./plugin/overlay/ /
-    fi
-
-    if ! echo ${pkgs} | grep -q "git"
-    then
-      pkg remove -y git-lite git
-      pkg autoremove -y
-    fi
-
-    ./plugin/post_install.sh
-
-    if [ -f ./plugin/pre_update.sh ]
-    then
-      ./plugin/pre_update.sh
-    fi
-
-    if [ -f ./plugin/post_update.sh ]
-    then
-      ./plugin/post_update.sh
-    fi
+  install_script: .cirrus/install_script.sh
 
     if [ -f ./plugin/ui.json ]
     then
@@ -134,14 +47,16 @@ install_template: &INSTALL_PLUGIN
 
 backuppc_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('backuppc.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-2
+        image_family: freebsd-12-1
   env:
     PLUGIN_FILE: "backuppc.json"
 
 bazarr_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('bazarr.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -150,6 +65,7 @@ bazarr_task:
 
 bind_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('bind.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -158,6 +74,7 @@ bind_task:
 
 calibre-web_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('calibre-web.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
@@ -166,6 +83,7 @@ calibre-web_task:
 
 channels-dvr_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('channels-dvr.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -174,6 +92,7 @@ channels-dvr_task:
 
 clamav_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('clamav.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -182,6 +101,7 @@ clamav_task:
 
 deluge-pip_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('deluge-pip.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
@@ -190,6 +110,7 @@ deluge-pip_task:
 
 dnsmasq_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('dnsmasq.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -198,6 +119,7 @@ dnsmasq_task:
 
 drupal8_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('drupal8.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -206,6 +128,7 @@ drupal8_task:
 
 duplicati_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('duplicati.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -214,6 +137,7 @@ duplicati_task:
 
 emby_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('emby.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -222,6 +146,7 @@ emby_task:
 
 emby-server-stable_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('emby-server-stable.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
@@ -230,14 +155,16 @@ emby-server-stable_task:
 
 esphome_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('esphome.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-11-3
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "esphome.json"
 
 famp_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('famp.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -246,6 +173,7 @@ famp_task:
 
 gitea_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('gitea.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -254,6 +182,7 @@ gitea_task:
 
 gitlab_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('gitlab.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -262,14 +191,16 @@ gitlab_task:
 
 gogs_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('gogs.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "gogs.json"
 
 grafana_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('grafana.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -278,6 +209,7 @@ grafana_task:
 
 heimdall-dashboard_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('heimdall-dashboard.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -286,18 +218,16 @@ heimdall-dashboard_task:
 
 homeassistant_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('homeassistant.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-11-2
-    - freebsd_instance:
-        image_family: freebsd-11-3
-    - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "homeassistant.json"
 
 homebridge_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('homebridge.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -306,9 +236,8 @@ homebridge_task:
 
 hoobs_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('hoobs.json')"
   matrix:
-    - freebsd_instance:
-        image_family: freebsd-11-3
     - freebsd_instance:
         image_family: freebsd-12-1
   env:
@@ -316,6 +245,7 @@ hoobs_task:
 
 i2p_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('i2p.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -324,6 +254,7 @@ i2p_task:
 
 irssi_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('irssi.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -332,6 +263,7 @@ irssi_task:
 
 jackett_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('jackett.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -340,6 +272,7 @@ jackett_task:
 
 jenkins_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('jenkins.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -348,6 +281,7 @@ jenkins_task:
 
 jenkins-lts_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('jenkins-lts.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -356,6 +290,7 @@ jenkins-lts_task:
 
 lidarr_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('lidarr.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -364,6 +299,7 @@ lidarr_task:
 
 madsonic_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('madsonic.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -372,6 +308,7 @@ madsonic_task:
 
 mineos_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('mineos.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
@@ -380,22 +317,25 @@ mineos_task:
 
 monica_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('monica.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-2
+        image_family: freebsd-11-3
   env:
     PLUGIN_FILE: "monica.json"
 
 mosquitto_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('mosquitto.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "mosquitto.json"
 
 motioneye_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('motioneye.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
@@ -404,6 +344,7 @@ motioneye_task:
 
 netdata_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('netdata.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -412,6 +353,7 @@ netdata_task:
 
 node-red_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('node-red.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
@@ -420,6 +362,7 @@ node-red_task:
 
 nzbget_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('nzbget.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -428,6 +371,7 @@ nzbget_task:
 
 openspeedtest-server_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('openspeedtest-server.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -436,14 +380,16 @@ openspeedtest-server_task:
 
 openvpn_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('openvpn.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "openvpn.json"
 
 privatebin_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('privatebin.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -452,6 +398,7 @@ privatebin_task:
 
 qbittorrent_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('qbittorrent.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -460,6 +407,7 @@ qbittorrent_task:
 
 quasselcore_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('quasselcore.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -468,6 +416,7 @@ quasselcore_task:
 
 radarr_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('radarr.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -476,6 +425,7 @@ radarr_task:
 
 rslsync_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('rslsync.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -484,6 +434,7 @@ rslsync_task:
 
 rtorrent-flood_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('rtorrent-flood.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -492,6 +443,7 @@ rtorrent-flood_task:
 
 sabnzbd_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('sabnzbd.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -500,6 +452,7 @@ sabnzbd_task:
 
 sickchill_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('sickchill.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -508,6 +461,7 @@ sickchill_task:
 
 sonarr_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('sonarr.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -516,22 +470,25 @@ sonarr_task:
 
 tasmoadmin_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('tasmoadmin.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "tasmoadmin.json"
 
 tautulli_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('tautulli.json')"
   matrix:
     - freebsd_instance:
-        image_family: freebsd-12-1
+        image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "tautulli.json"
 
 transmission_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('transmission.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -540,6 +497,7 @@ transmission_task:
 
 unificontroller_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('unificontroller.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -548,6 +506,7 @@ unificontroller_task:
 
 unificontroller-lts_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('unificontroller-lts.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -556,6 +515,7 @@ unificontroller-lts_task:
 
 vault_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('vault.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -564,6 +524,7 @@ vault_task:
 
 weechat_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('weechat.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -572,6 +533,7 @@ weechat_task:
 
 xmrig_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('xmrig.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-11-3
@@ -580,6 +542,7 @@ xmrig_task:
 
 zoneminder_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('zoneminder.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -588,6 +551,7 @@ zoneminder_task:
 
 zrepl_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('zrepl.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-1
@@ -596,9 +560,9 @@ zrepl_task:
 
 zwavejs2mqtt_task:
   <<: *INSTALL_PLUGIN
+  only_if: "changesInclude('zwavejs2mqtt.json')"
   matrix:
     - freebsd_instance:
         image_family: freebsd-12-2
   env:
     PLUGIN_FILE: "zwavejs2mqtt.json"
-
