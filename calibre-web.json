@@ -11,7 +11,7 @@
         "py37-setuptools",
         "py37-sqlite3",
         "py37-ldap",
-        "rust",
+        "py37-wheel",
         "calibre",
         "unrar",
         "ImageMagick7"
