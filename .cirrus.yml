@@ -9,6 +9,10 @@ install_template: &INSTALL_PLUGIN
     pkg install --yes python38
     python3.8 -c "import sys; print(sys.version)"
 
+    freebsd-version
+    freebsd-version -u
+    freebsd-version -uk
+
 #    release=$(jq -r '.release' $PLUGIN_FILE)
 #    name=$(jq '.name' $PLUGIN_FILE)
 #    packagesite=$(jq '.packagesite' $PLUGIN_FILE)
