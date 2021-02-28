@@ -13,7 +13,7 @@ pkgs=$(jq -r '.pkgs | join(" ")' $plugin_file)
 kmods=$(jq -r '.kmods' $plugin_file)
 
 # Clone plugins artifacts
-plugin_dir="./plugin"
+plugin_dir="/usr/local/plugin"
 pkg install --yes git-lite || pkg install --yes git
 release_branch="$(freebsd-version | cut -d '-' -f1)-RELEASE"
 git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b master ${plugin_repo} ${plugin_dir}
