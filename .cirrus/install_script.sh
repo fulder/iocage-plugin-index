@@ -22,7 +22,7 @@ wait_for_admin_portal()
   export CURLOPT_SSL_VERIFYPEER=FALSE
   export CURLOPT_SSL_VERIFYHOST=FALSE
   curl_follow_redirects="--location"
-  if [ "$FOLLOW_REDIREDTS" == "false" ]
+  if [ "$FOLLOW_REDIRECTS" == "false" ]
   then
     curl_follow_redirects=""
   fi
