@@ -78,15 +78,6 @@ jenkins-lts_task:
   env:
     PLUGIN_FILE: "jenkins-lts.json"
 
-lidarr_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('lidarr.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "lidarr.json"
-
 motioneye_task:
   <<: *INSTALL_PLUGIN
   only_if: "changesInclude('motioneye.json', '.cirrus/install_script.sh')"
@@ -104,15 +95,6 @@ unificontroller-lts_task:
         image_family: freebsd-11-3
   env:
     PLUGIN_FILE: "unificontroller-lts.json"
-
-vault_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('vault.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "vault.json"
 
 zwavejs2mqtt_task:
   <<: *INSTALL_PLUGIN
