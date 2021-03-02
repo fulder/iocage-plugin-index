@@ -71,7 +71,25 @@ git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b mast
 exp_ui_url=""
 if [ -f ${plugin_dir}/ui.json ]
 then
-  admin_portal=$(jq -r '.adminportal' ${plugin_dir}/ui.json | sed 's/%%IP%%/localhost/')
+  ip_address=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+  admin_portal=$(jq -r '.adminportal' ${plugin_dir}/ui.json | sed "s/%%IP%%/${ip_address}/")
+  place_holders=$(jq -r '.adminportal_placeholders' ${plugin_dir}/ui.json)
+
+  if [ "$place_holders" != "null" ]
+  then
+    print_info "Found admin portal placeholders: ${place_holders}"
+    ph_keys=$(echo $place_holders | jq -r 'keys[]')
+
+    for ph in ${ph_keys}
+    do
+      place_holder_value=$(jq -r '."adminportal_placeholders"."'${ph}'"' ${plugin_dir}/ui.json)
+      resolved_default_value=$(jq -r '.options."'${place_holder_value}'".default' ${plugin_dir}/settings.json)
+
+      print_info "Replacing ${ph} with ${resolved_default_value} in admin_portal UI ${admin_portal}"
+      admin_portal=$(echo $admin_portal | sed "s/${ph}/${resolved_default_value}/")
+    done
+  fi
+
   if echo $admin_portal | grep -q "http\|localhost"
   then
     print_info "Found http or localhost in Admin Portal, will try to fetch it after post_install"
@@ -157,7 +175,7 @@ pkg install --no-repo-update --yes $pkgs
 
 if [ -d "${plugin_dir}/overlay" ]
 then
-  print_info "Found overlay folder"
+  print_info "Found overlay folder. Will copy '${plugin_dir}/overlay' into root path '/'"
   cp -r ${plugin_dir}/overlay/ /
 fi
 
