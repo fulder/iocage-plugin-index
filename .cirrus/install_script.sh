@@ -35,6 +35,8 @@ wait_for_admin_portal()
       break
     fi
 
+    fetch --no-verify-hostname --no-verify-peer $(echo $exp_ui_url | sed 's/127.0.0.1/localhost')
+
     print_info "Admin Portal fetch failed, sleeping ${sleep_time} seconds, and retrying (${retry}/${max_retries})"
     sleep ${sleep_time}
   done
