@@ -18,6 +18,8 @@ print_error()
 
 wait_for_admin_portal()
 {
+  ifconfig
+
   exp_ui_url=$1
 
   max_retries=5
