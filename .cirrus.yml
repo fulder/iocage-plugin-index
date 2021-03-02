@@ -14,15 +14,6 @@ calibre-web_task:
   env:
     PLUGIN_FILE: "calibre-web.json"
 
-emby_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('emby.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "emby.json"
-
 homebridge_task:
   <<: *INSTALL_PLUGIN
   only_if: "changesInclude('homebridge.json', '.cirrus/install_script.sh')"
