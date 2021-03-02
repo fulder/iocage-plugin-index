@@ -143,7 +143,7 @@ done
 
 if [ "$kmods" != "null" ]
 then
-  print_info "Plugin kmods set"
+  print_info "Found plugin kmods"
   echo $kmods | jq -r  '.[]' | while IFS='' read kmod
   do
     print_info "Loading kmod: ${kmod}"
