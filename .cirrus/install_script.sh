@@ -21,10 +21,10 @@ wait_for_admin_portal()
   pkg install --yes curl
   export CURLOPT_SSL_VERIFYPEER=FALSE
   export CURLOPT_SSL_VERIFYHOST=FALSE
-  curl_redirects_follow = "--location"
+  curl_redirects_follow="--location"
   if [ "$FOLLOW_REDIREDTS" == "false" ]
   then
-    curl_redirects_follow = ""
+    curl_redirects_follow=""
   fi
 
   exp_ui_url=$1
