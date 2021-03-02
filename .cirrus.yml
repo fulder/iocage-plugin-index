@@ -23,15 +23,6 @@ emby_task:
   env:
     PLUGIN_FILE: "emby.json"
 
-emby-server-stable_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('emby-server-stable.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "emby-server-stable.json"
-
 homebridge_task:
   <<: *INSTALL_PLUGIN
   only_if: "changesInclude('homebridge.json', '.cirrus/install_script.sh')"
