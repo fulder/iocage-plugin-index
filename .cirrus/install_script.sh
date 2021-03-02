@@ -38,8 +38,6 @@ wait_for_admin_portal()
       break
     fi
 
-    fetch --no-verify-hostname --no-verify-peer $(echo $exp_ui_url | sed 's/127.0.0.1/localhost/')
-
     print_info "Admin Portal fetch failed, sleeping ${sleep_time} seconds, and retrying (${retry}/${max_retries})"
     sleep ${sleep_time}
   done
@@ -73,7 +71,8 @@ git clone -b ${release_branch} ${plugin_repo} ${plugin_dir} || git clone -b mast
 exp_ui_url=""
 if [ -f ${plugin_dir}/ui.json ]
 then
-  admin_portal=$(jq -r '.adminportal' ${plugin_dir}/ui.json | sed 's/%%IP%%/127.0.0.1/')
+  ip_address=$(ifconfig | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v '127.0.0.1')
+  admin_portal=$(jq -r '.adminportal' ${plugin_dir}/ui.json | sed "s/%%IP%%/${ip_address}/")
   place_holders=$(jq -r '.adminportal_placeholders' ${plugin_dir}/ui.json)
 
   if [ "$place_holders" != "null" ]
