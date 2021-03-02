@@ -96,12 +96,3 @@ unificontroller-lts_task:
   env:
     PLUGIN_FILE: "unificontroller-lts.json"
 
-zwavejs2mqtt_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('zwavejs2mqtt.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "zwavejs2mqtt.json"
-
