@@ -19,6 +19,7 @@ print_error()
 wait_for_admin_portal()
 {
   ifconfig
+  cat /etc/resolv.conf
 
   exp_ui_url=$1
 
