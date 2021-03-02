@@ -33,14 +33,14 @@ hoobs_task:
     PLUGIN_FILE: "hoobs.json"
 
 
-jackett_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('jackett.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "jackett.json"
-    FOLLOW_REDIRECTS: false
+#jackett_task:
+#  <<: *INSTALL_PLUGIN
+#  only_if: "changesInclude('jackett.json', '.cirrus/install_script.sh')"
+#  matrix:
+#    - freebsd_instance:
+#        image_family: freebsd-12-1
+#  env:
+#    PLUGIN_FILE: "jackett.json"
+#    FOLLOW_REDIRECTS: false
 
 
