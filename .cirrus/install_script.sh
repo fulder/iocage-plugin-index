@@ -21,10 +21,10 @@ wait_for_admin_portal()
   pkg install --yes curl
   export CURLOPT_SSL_VERIFYPEER=FALSE
   export CURLOPT_SSL_VERIFYHOST=FALSE
-  curl_redirects_follow="--location"
+  curl_follow_redirects="--location"
   if [ "$FOLLOW_REDIREDTS" == "false" ]
   then
-    curl_redirects_follow=""
+    curl_follow_redirects=""
   fi
 
   exp_ui_url=$1
@@ -39,7 +39,7 @@ wait_for_admin_portal()
   while [ $retry -lt $max_retries ]
   do
     retry=$(expr $retry + 1)
-    if curl --fail --verbose ${curl_redirects_follow} --connect-timeout ${curl_timeout} ${exp_ui_url} #2> /dev/null
+    if curl --fail --verbose ${curl_follow_redirects} --connect-timeout ${curl_timeout} ${exp_ui_url} #2> /dev/null
     then
       fetch_success=true
       break
