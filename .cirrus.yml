@@ -43,33 +43,6 @@ jackett_task:
     PLUGIN_FILE: "jackett.json"
     FOLLOW_REDIRECTS: false
 
-jenkins_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('jenkins.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "jenkins.json"
-
-jenkins-lts_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('jenkins-lts.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-1
-  env:
-    PLUGIN_FILE: "jenkins-lts.json"
-
-motioneye_task:
-  <<: *INSTALL_PLUGIN
-  only_if: "changesInclude('motioneye.json', '.cirrus/install_script.sh')"
-  matrix:
-    - freebsd_instance:
-        image_family: freebsd-12-2
-  env:
-    PLUGIN_FILE: "motioneye.json"
-
 unificontroller-lts_task:
   <<: *INSTALL_PLUGIN
   only_if: "changesInclude('unificontroller-lts.json', '.cirrus/install_script.sh')"

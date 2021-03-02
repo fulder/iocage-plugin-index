@@ -182,13 +182,12 @@ pkg install --no-repo-update --yes $pkgs
 
 if [ -d "${plugin_dir}/overlay" ]
 then
-  print_info "Found overlay folder"
+  print_info "Found overlay folder. Will copy '${plugin_dir}/overlay' into root path '/'"
   cp -r ${plugin_dir}/overlay/ /
 fi
 
 print_info "Executing post_install.sh script"
 ${plugin_dir}/post_install.sh
-echo $?
 print_success "Post install complete"
 
 print_info "Disable plugins pkg repos"
