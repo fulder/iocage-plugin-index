@@ -96,7 +96,9 @@ then
   cp -r ${plugin_dir}/overlay/ /
 fi
 
+set -euo pipefail
 ${plugin_dir}/post_install.sh
+set -e
 
 if [ -f ${plugin_dir}/pre_update.sh ] && ! [ -x ${plugin_dir}/pre_update.sh ]
 then
