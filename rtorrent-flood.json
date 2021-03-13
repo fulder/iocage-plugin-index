@@ -6,8 +6,6 @@
         "tmux",
         "rtorrent",
         "openvpn",
-        "git",
-        "python2",
         "node",
         "npm"
     ],
