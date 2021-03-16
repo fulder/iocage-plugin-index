@@ -1,6 +1,9 @@
 #!/bin/sh
 set -e
 
+ifconfig epair0 create
+ifconfig epair0a inet 192.0.2.1/24 up
+
 pkg install --yes jq
 
 release=$(jq -r '.release' $PLUGIN_FILE)
@@ -96,9 +99,6 @@ then
   cp -r ${plugin_dir}/overlay/ /
 fi
 
-freebsd-update install
-ifconfig epair0 create
-ifconfig epair0a inet 192.0.2.1/24 up
 
 ifconfig
 . ${plugin_dir}/post_install.sh
