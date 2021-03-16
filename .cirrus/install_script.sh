@@ -96,7 +96,9 @@ then
   cp -r ${plugin_dir}/overlay/ /
 fi
 
-ls -l /usr/local/sbin/
+ifconfig epair create
+ifconfig epair0a inet 192.0.2.1/24 up
+
 ifconfig
 . ${plugin_dir}/post_install.sh
 
