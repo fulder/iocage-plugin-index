@@ -1,6 +1,7 @@
 #!/bin/sh
 set -e
 
+ifconfig -h
 ifconfig epair0 create
 ifconfig epair0a inet 192.0.2.1/24 up
 
