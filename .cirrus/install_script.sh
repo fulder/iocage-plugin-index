@@ -96,7 +96,7 @@ then
   cp -r ${plugin_dir}/overlay/ /
 fi
 
-${plugin_dir}/post_install.sh
+. ${plugin_dir}/post_install.sh
 
 if [ -f ${plugin_dir}/pre_update.sh ] && ! [ -x ${plugin_dir}/pre_update.sh ]
 then
