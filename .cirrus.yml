@@ -1,6 +1,6 @@
 freebsd_instance:
-  cpu: 4
-  memory: "4"
+  cpu: 1
+  memory: "1"
 
 env:
   PATH: "/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/root/bin"
