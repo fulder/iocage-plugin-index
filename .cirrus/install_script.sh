@@ -97,6 +97,7 @@ then
 fi
 
 ls -l /usr/local/sbin/
+ifconfig
 . ${plugin_dir}/post_install.sh
 
 if [ -f ${plugin_dir}/pre_update.sh ] && ! [ -x ${plugin_dir}/pre_update.sh ]
