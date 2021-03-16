@@ -1,9 +1,8 @@
 #!/bin/sh
 set -e
 
-ifconfig lo2 create
-ifconfig lo2 name epair0a
-ifconfig epair0a inet 192.0.2.1/24 up
+ifconfig vtnet0 name epair0a
+ifconfig
 
 pkg install --yes jq
 
