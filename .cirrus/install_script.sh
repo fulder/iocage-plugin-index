@@ -96,7 +96,8 @@ then
   cp -r ${plugin_dir}/overlay/ /
 fi
 
-ifconfig epair create
+freebsd-update install
+ifconfig epair0 create
 ifconfig epair0a inet 192.0.2.1/24 up
 
 ifconfig
