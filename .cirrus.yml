@@ -3,7 +3,7 @@ freebsd_instance:
   memory: "4"
 
 env:
-  HOME: "/root"
+  HOME: "/"
 
 install_template: &INSTALL_PLUGIN
   install_script: .cirrus/install_script.sh
