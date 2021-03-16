@@ -194,7 +194,7 @@ then
 fi
 
 print_info "Executing post_install.sh script"
-. ${plugin_dir}/post_install.sh
+${plugin_dir}/post_install.sh
 print_success "Post install complete"
 
 print_info "Disable plugins pkg repos"
