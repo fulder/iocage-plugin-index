@@ -41,6 +41,8 @@ wait_for_admin_portal()
   print_info "Trying to curl Admin Portal at: ${exp_ui_url}, with ${curl_retires} retries, sleeping ${curl_retries_sleep} seconds"
 
   sockstat -4 -l
+  cat /root/.pm2/pm2.log
+
 
   if curl \
       --fail \
