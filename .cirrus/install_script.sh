@@ -40,7 +40,7 @@ wait_for_admin_portal()
 
   print_info "Trying to curl Admin Portal at: ${exp_ui_url}, with ${curl_retires} retries, sleeping ${curl_retries_sleep} seconds"
 
-  curl -v http://localhost
+  sockstat -4 -l
 
   if curl \
       --fail \
