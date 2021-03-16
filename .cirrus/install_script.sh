@@ -1,9 +1,6 @@
 #!/bin/sh
 set -e
 
-ifconfig vtnet0 name epair0a
-ifconfig
-
 pkg install --yes jq
 
 release=$(jq -r '.release' $PLUGIN_FILE)
@@ -99,9 +96,9 @@ then
   cp -r ${plugin_dir}/overlay/ /
 fi
 
-
-ifconfig
 . ${plugin_dir}/post_install.sh
+
+service ipfw stop
 
 if [ -f ${plugin_dir}/pre_update.sh ] && ! [ -x ${plugin_dir}/pre_update.sh ]
 then
