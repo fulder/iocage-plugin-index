@@ -2,6 +2,10 @@ freebsd_instance:
   cpu: 4
   memory: "4"
 
+env:
+  HOME: "/root"
+  USER: root
+
 install_template: &INSTALL_PLUGIN
   install_script: .cirrus/install_script.sh
 
