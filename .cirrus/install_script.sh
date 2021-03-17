@@ -77,6 +77,8 @@ check_service_status()
   done
 }
 
+printenv
+
 pkg install --yes jq
 
 release=$(jq -r '.release' $PLUGIN_FILE)
